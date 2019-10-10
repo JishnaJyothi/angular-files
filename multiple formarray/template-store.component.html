@@ -1,0 +1,147 @@
+
+<a _ngcontent-jti-c11="" class="a-link underline" data-target="#addTriggers" data-toggle="modal">+ Add additional trigger</a>
+<!-- Extra Large Modal -->
+<div class="modal fade" id="addTriggers" tabindex="-1" role="dialog" aria-labelledby="addTriggers" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-slideup modal-xl" role="document">
+    <!-- START addrigger Form -->
+    <form name="form" [formGroup]="addTriggerForm">
+      <!-- START modal contents -->
+      <div class="modal-content">
+        <!-- START modal block -->
+        <div class="block block-themed block-transparent mb-0">
+          <!-- START modal header -->
+          <div class="block-header bg-primary-dark">
+            <h3 class="block-title">Trigger Flow</h3>
+            <div class="block-options">
+              <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                <i class="si si-close"></i>
+              </button>
+            </div>
+          </div>
+          <!-- END modal header -->
+          <!-- START modal body -->
+          <div class="block-content">
+            <div class="row">
+              <div class="col-md-7">
+                <div class="form-group">
+                  <label for="triggerName">Name</label>
+                  <input type="text" class="form-control form-control-lg" id="triggerName" formControlName="triggerName" placeholder="Enter your firstname..">
+                </div>
+              </div>
+            </div>
+
+            <div class="row p-15">
+              <div class="col-md-12 bg-body-dark p-15">
+                <div class="form-group row">
+                  <label class="col-md-12" for="triggerType">Trigger Type</label>
+                  <div class="col-md-5">
+                    <select class="form-control" id="triggerType" formControlName="triggerType" placeholder="Trigger Options" data-msg-required="Please select your trigger type." size="1">
+                      <option value="http">HTTP Trigger</option>
+                    </select>
+                  </div>
+                  <div class="col-md-7">
+                    <div class="" *ngIf="addTriggerForm?.value?.triggerType == 'http'">
+                      <span class="font-weight-bold ">This clause can be triggered by sending a request to:</span>
+                      <p class="break text-muted">Your Flow Trigger URL will be generated when you first save this flow</p>
+                      <span class="font-weight-bold ">Using the Bearer authentication token:</span>
+                      <p class=" break text-muted">{{smartClause?.authToken}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row p-15" formArrayName="triggerInfo">
+              <div class="col-md-12" *ngFor="let info of addTriggerForm.get('triggerInfo').controls; index as i;">
+                <div [formGroupName]="i" class=" b-full p-15">
+                  <!-- START multiple trigger steps -->
+                  <div class="form-group row">
+                    <div class="col-4">
+                      <label for="tType">Type</label>
+                      <select class="form-control" id="tType" formControlName="tType" placeholder="Trigger Options" data-msg-required="Please select your trigger type." size="1">
+                        <option value="http">HTTP Trigger</option>
+                      </select>
+                    </div>
+                    <div class="col-4">
+                      <label for="tURI">URI</label>
+                      <input type="text" id="tURI" formControlName="tURI" class="form-control form-control-lg" placeholder="https://www.example.com">
+                    </div>
+                    <div class="col-4">
+                      <label for="tMethod">Method</label>
+                      <select class="form-control" id="tMethod" formControlName="tMethod" placeholder="Trigger Options" data-msg-required="Please select your trigger type." size="1">
+                        <option value="post">POST</option>
+                        <option value="get">GET</option>
+                        <option value="delete">DELETE</option>
+                        <option value="put">PUT</option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- END multiple trigger steps -->
+
+                  <h5 class="mt-10 mb-10">Headers</h5>
+                  <!-- START multiple header contents -->
+                  <div class="row p-15 b-full m-10" formArrayName="triggerHeaderInfo">
+                    <div class="col-md-12 p-15" *ngFor="let hinfo of info.get('triggerHeaderInfo').controls; index as j;">
+                      <div class="form-group row" [formGroupName]="j">
+                    <div class="col-5">
+                      <label for="hName">Name</label>
+                      <input type="text" id="hName" formControlName="hName" class="form-control form-control-lg" placeholder="Enter your lastname..">
+                    </div>
+                    <div class="col-5">
+                      <label for="hValue">Value</label>
+                      <input type="text" id="hValue" formControlName="hValue" class="form-control form-control-lg" placeholder="Enter your lastname..">
+                    </div>
+                    <div class="col-2 text-center pt-20">
+                      <i class="fal fa-minus-circle fa-1x  mt-20" (click)="removeTHeaderInfo(info.controls.triggerHeaderInfo,j)"></i>
+                    </div>
+                  </div>
+                </div>
+                <i class="fal fa-plus-circle fa-1x" (click)="addTHeaderInfo(info.controls.triggerHeaderInfo)"
+                *ngIf="info.get('triggerHeaderInfo').controls?.length < 4"></i>
+
+              </div>
+                  <!-- START multiple header contents -->
+                  <hr>
+  <!-- START JSON body -->
+                  <div class="form-group row mt-5">
+                    <label class="col-7" for="tBody">Body(JSON)</label>
+                    <div class="col-7">
+                      <textarea class="form-control" id="tBody" formControlName="tBody" rows="6" placeholdertBody="Content.."></textarea>
+                    </div>
+                  </div>
+                  <!-- END JSON body -->
+                </div>
+              <div class="col-md-12 text-center p-10">
+                <i class="fal fa-plus-circle fa-2x" (click)="addTriggerInfo()"
+                *ngIf="i=== addTriggerForm.get('triggerInfo').controls?.length - 1 && addTriggerForm.get('triggerInfo').controls?.length < 4"></i>
+              </div>
+            </div>
+  </div>
+
+            <div class="row p-15">
+              <div class="col-md-12 bg-body-dark p-15">
+                <span class="font-weight-bold d-block">Send data to docuTrust clause</span>
+                <a  class="a-link underline d-block" routerLink="#" target="_blank">View Documentation</a>
+              </div>
+            </div>
+
+          </div>
+          <!-- END modal body -->
+        </div>
+        <!-- START modal block -->
+
+        <!-- START modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-alt-success" data-dismiss="modal">
+            <i class="fa fa-check"></i> Perfect
+          </button>
+        </div>
+        <!-- END modal footer -->
+      </div>
+      <!-- END modal contents -->
+    </form>
+    <!-- END addrigger Form -->
+  </div>
+</div>
+<!-- END Extra Large Modal -->
